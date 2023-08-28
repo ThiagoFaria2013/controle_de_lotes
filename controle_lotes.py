@@ -1,18 +1,21 @@
-import pandas as pd
+import pdfplumber
 
-linhas_validas = []
+pdf_path = r'C:\Users\Usuario\Desktop\trabalho\sicoob_2022_04_10_12_06_13 (1).pdf'
+pdf = pdfplumber.open(pdf_path)
 
+texto_extrato = []
 
-with open(r'C:\Users\Usuario\Documents\csv_teste\sicoob_2022_04_10_12_06_13-_1_.csv', 'r') as arquivo:
+linha_atual = 0
 
-    for _ in range(9):
-        next(arquivo)
+for page in pdf.pages:
+    page_text = page.extract_text()
+    
+    linha_atual += len(page_text.split('\n'))
 
+    if linha_atual > 8:
+        texto_extrato.append(page_text)
 
-    for linha in arquivo:
-        campos = linha.strip().split()
-        if len(campos) == 3:
-            linhas_validas.append(campos)
+pdf.close()
 
-
-df = pd.DataFrame(linhas_validas, columns=['DATA', 'HISTORICO', 'VALOR'])
+for texto in texto_extrato:
+    print(texto)
