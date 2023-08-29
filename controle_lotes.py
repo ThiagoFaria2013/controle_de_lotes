@@ -1,21 +1,11 @@
-import pdfplumber
+import tabula
 
-pdf_path = r'C:\Users\Usuario\Desktop\trabalho\sicoob_2022_04_10_12_06_13 (1).pdf'
-pdf = pdfplumber.open(pdf_path)
+pdf_file = 'C:\\Users\\Usuario\\Desktop\\trabalho\\sicoob_2022_04_10_12_06_13 (1).pdf'
 
-texto_extrato = []
+tables = tabula.read_pdf(pdf_file, pages='all')
 
-linha_atual = 0
-
-for page in pdf.pages:
-    page_text = page.extract_text()
-    
-    linha_atual += len(page_text.split('\n'))
-
-    if linha_atual > 8:
-        texto_extrato.append(page_text)
-
-pdf.close()
-
-for texto in texto_extrato:
-    print(texto)
+for idx, table in enumerate(tables):
+    # Exemplo: Imprima a tabela
+    print(f"Tabela {idx + 1}:\n")
+    print(table)
+    print("\n")
